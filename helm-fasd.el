@@ -53,7 +53,7 @@
    (keymap :initform helm-generic-files-map)
    (help-message :initform helm-generic-file-help-message)
    (candidate-number-limit :initform 9999)
-   (mode-line :initform helm-generic-file-mode-line-string)))
+   (mode-line :initform helm-read-file-name-mode-line-string)))
 
 (defvar helm-source-fasd
   (helm-make-source "fasd" 'helm-fasd-source
