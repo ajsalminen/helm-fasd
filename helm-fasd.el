@@ -46,11 +46,11 @@
                        (replace-regexp-in-string "\n" "" event))))))))
 
 
-(defclass helm-fasd-source (helm-source-async helm-type-file)
+(defclass helm-fasd-source (helm-source-async) ;; helm-type-file
   ((init :initform 'helm-fasd-set-command)
    (candidates-process :initform 'helm-fasd-init)
    (history :initform 'helm-file-name-history)
-   (keymap :initform helm-generic-files-map)
+;;   (keymap :initform helm-generic-files-map)
    (help-message :initform helm-generic-file-help-message)
    (candidate-number-limit :initform 9999)
    (mode-line :initform helm-read-file-name-mode-line-string)))
