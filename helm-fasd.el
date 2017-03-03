@@ -1,4 +1,8 @@
-;;; helm-fasd --- Helm source for fasd
+;;; helm-fasd.el --- Helm source for fasd
+
+;; Author: Antti Salminen <antti.salminen@gmail.com>
+;; URL: https://github.com/ajsalminen/helm-fasd
+;; Package-Requires: ((helm "2.0"))
 
 ;;; Commentary:
 
