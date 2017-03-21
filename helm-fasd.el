@@ -22,7 +22,7 @@
 
 (defun helm-fasd-init ()
   "Initialize async locate process for `helm-source-fasd'."
-  (let ((cmd (concat "fasd -R -l -a " (shell-quote-argument (car (split-string helm-pattern " "))))
+  (let ((cmd (concat "fasd -R -l -a " (shell-quote-argument helm-pattern))
              ))
     (helm-log "Starting helm-fasd process")
     (helm-log "Command line used was:\n\n%s"
