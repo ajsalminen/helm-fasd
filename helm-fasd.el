@@ -18,6 +18,7 @@
 
 (defun helm-fasd-set-command ()
   "Return the used fasd command."
+  (require 'helm-for-files)
   (setq helm-fasd-command "fasd -R -l -a"))
 
 (defun helm-fasd-init ()
