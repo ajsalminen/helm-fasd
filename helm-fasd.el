@@ -8,7 +8,7 @@
 
 ;;; Code:
 (require 'helm)
-
+(require 'helm-types)
 (defvar helm-fasd-command nil)
 
 (defface helm-fasd-finish
