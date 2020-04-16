@@ -9,25 +9,18 @@
 ;;; Code:
 (require 'helm)
 (require 'helm-types)
-(defvar helm-fasd-command nil)
+(require 'helm-for-files)
 
 (defface helm-fasd-finish
   '((t (:foreground "Green")))
   "Face used in mode line when fasd process returns."
   :group 'helm-fasd)
 
-(defun helm-fasd-set-command ()
-  "Return the used fasd command."
-  (require 'helm-for-files)
-  (setq helm-fasd-command "fasd -R -l -a"))
-
-(defun helm-fasd-init ()
+(defun helm-fasd-init (command)
   "Initialize async locate process for `helm-source-fasd'."
-  (let ((cmd (concat "fasd -R -l -a " (shell-quote-argument helm-pattern))
-             ))
+  (let ((cmd (concat command (shell-quote-argument helm-pattern))))
     (helm-log "Starting helm-fasd process")
-    (helm-log "Command line used was:\n\n%s"
-              (concat ">>> " (propertize cmd 'face 'font-lock-comment-face) "\n\n"))
+    (helm-log "Command line used was:\n\n%s" (concat ">>> " (propertize cmd 'face 'font-lock-comment-face) "\n\n"))
     (prog1
         (start-process-shell-command
          "fasd-process" helm-buffer
@@ -50,10 +43,8 @@
              (helm-log "Error: Fasd %s"
                        (replace-regexp-in-string "\n" "" event))))))))
 
-
 (defclass helm-fasd-source (helm-source-async helm-type-file)
-  ((init :initform 'helm-fasd-set-command)
-   (candidates-process :initform 'helm-fasd-init)
+  ((candidates-process :initform 'helm-fasd-init)
    (history :initform 'helm-file-name-history)
    (keymap :initform helm-generic-files-map)
    (help-message :initform helm-generic-file-help-message)
@@ -61,8 +52,7 @@
    (mode-line :initform helm-read-file-name-mode-line-string)))
 
 (defvar helm-source-fasd
-  (helm-make-source "fasd" 'helm-fasd-source
-    ))
+  (helm-make-source "fasd" 'helm-fasd-source))
 
 ;;;###autoload
 (defun helm-fasd ()
@@ -70,10 +60,30 @@
   (interactive)
   (require 'helm-mode)
   (let ((helm-ff-transformer-show-only-basename nil))
-    (helm :sources 'helm-source-fasd
-          :buffer "*helm fasd*"
-          )))
+    (helm :sources (helm-make-source "FASD" 'helm-fasd-source
+                     :candidates-process (apply-partially #'helm-fasd-init
+                                                          "fasd -R -l -s "))
+          :buffer "*helm fasd*")))
 
+;;;###autoload
+(defun helm-fasd-files ()
+  "Helm source for fasd listing files."
+  (interactive)
+  (let ((helm-ff-transformer-show-only-basename nil))
+    (helm :sources (helm-make-source "FASD files" 'helm-fasd-source
+                     :candidates-process (apply-partially #'helm-fasd-init
+                                                          "fasd -R -l -f "))
+          :buffer "*helm fasd files*")))
+
+;;;###autoload
+(defun helm-fasd-directories ()
+  "Helm source for fasd listing directories."
+  (interactive)
+  (let ((helm-ff-transformer-show-only-basename nil))
+    (helm :sources (helm-make-source "FASD directories" 'helm-fasd-source
+                     :candidates-process (apply-partially #'helm-fasd-init
+                                                          "fasd -R -l -d "))
+          :buffer "*helm fasd directories*")))
 
 ;;;###autoload
 (defun helm-find-fasd-add-file ()
