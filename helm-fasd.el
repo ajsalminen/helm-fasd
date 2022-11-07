@@ -19,8 +19,8 @@
 (defun helm-fasd-init (command)
   "Initialize async locate process for `helm-source-fasd'."
   (let ((cmd (concat command (shell-quote-argument helm-pattern))))
-    (helm-log "Starting helm-fasd process")
-    (helm-log "Command line used was:\n\n%s" (concat ">>> " (propertize cmd 'face 'font-lock-comment-face) "\n\n"))
+    (helm-log "helm-fasd" "Starting helm-fasd process")
+    (helm-log "helm-fasd" "Command line used was:\n\n%s" (concat ">>> " (propertize cmd 'face 'font-lock-comment-face) "\n\n"))
     (prog1
         (start-process-shell-command
          "fasd-process" helm-buffer
@@ -40,7 +40,7 @@
                                               0))
                                  'face 'helm-fasd-finish))))
                  (force-mode-line-update))
-             (helm-log "Error: Fasd %s"
+             (helm-log "helm-fasd" "Error: Fasd %s"
                        (replace-regexp-in-string "\n" "" event))))))))
 
 (defclass helm-fasd-source (helm-source-async helm-type-file)
